@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+</head>
+<body>
+    <div id="app">
+        <h2>Register</h2>
+        <input id="username" placeholder="Username">
+        <input id="password" type="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+        
+        <h2>Create Todo</h2>
+        <input id="userId" placeholder="User ID">
+        <input id="title" placeholder="Todo title">
+        <button onclick="createTodo()">Add Todo</button>
+        
+        <div id="todos"></div>
+    </div>
+
+    <script>
+        async function register() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const response = await fetch('http://localhost:5001/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            alert(`User registered with ID: ${data.user_id}`);
+        }
+
+        async function createTodo() {
+            const userId = document.getElementById('userId').value;
+            const title = document.getElementById('title').value;
+            const response = await fetch('http://localhost:5002/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, title })
+            });
+            const data = await response.json();
+            document.getElementById('todos').innerHTML += `<p>Todo ${data.todo_id}: ${title}</p>`;
+        }
+    </script>
+</body>
+</html>
